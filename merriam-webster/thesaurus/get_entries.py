@@ -1,11 +1,13 @@
 import requests, json, re
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from pathlib import Path
 
-base_url = 'https://www.merriam-webster.com/browse/thesaurus/'
+base_url = 'https://www.merriam-webster.com/browse/thesaurus'
+base_url_parsed = urlparse(base_url)
 
 def get_soup(letter, page):
-    url = base_url + letter + '/' + str(page)
+    url = base_url_parsed._replace(path=base_url_parsed.path + '/' + letter + '/' + str(page)).geturl()
     data = requests.get(url)
     soup = BeautifulSoup(data.text, 'html.parser')
     return soup
@@ -47,12 +49,12 @@ def main():
             entries += get_entries(soup)
 
         with entries_path.open('w') as f:
-            json.dump(entries, f, indent=2)
+            json.dump(entries, f, indent=2, ensure_ascii=False)
         
         print(f'Found {len(entries)} entries, current letter: {letter}')
 
     with entries_path.open('w') as f:
-        json.dump(entries, f, indent=2)
+        json.dump(entries, f, indent=2, ensure_ascii=False)
 
     print(f'Found {len(entries)} entries')
 
