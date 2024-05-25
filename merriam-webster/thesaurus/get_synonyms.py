@@ -24,7 +24,7 @@ def main():
         entries = json.load(f)
     dir = entries_path.parent
 
-    out_file = dir / 'thesaurus.json'
+    out_file = dir / 'data.json'
 
     if out_file.exists():
         with out_file.open() as f:
@@ -100,7 +100,7 @@ def main():
             with out_file.open('w', encoding='utf-8') as f:
                 json.dump(synonym_d, f, indent=4, ensure_ascii=False)
     with out_file.open('w', encoding='utf-8') as f:
-        json.dump(synonym_d, f, indent=4, ensure_ascii=False)
+        json.dump(synonym_d, f)
 
 if __name__ == '__main__':
     main()
